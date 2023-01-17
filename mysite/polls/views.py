@@ -4,9 +4,11 @@ from django.shortcuts import HttpResponse
 import datetime
 import requests
 import json
-from .helper import access_token_sf
+from polls.helper import access_token_sf
 
-
+def index(request):
+    return HttpResponse("Django working")
+    
 @api_view(['POST'])
 def course_created(request):
     ###Test it###
@@ -27,6 +29,7 @@ def course_created(request):
 
 
 
+
 @api_view(['POST'])
 def user_enrolled(request):
     if request.method == 'POST':
@@ -35,7 +38,7 @@ def user_enrolled(request):
         id = res['user_id']
         course_data = getCourse(course_id)
         user_data = getUser(id)
-        
+
         enroll_info = {
             "firstname": user_data[0]["firstname"],
             "lastname": user_data[0]["lastname"],
@@ -54,11 +57,13 @@ def user_enrolled(request):
         'Authorization': f'Bearer {access_token}'
         }
 
-        # response = requests.request("POST", url, headers=headers, data=payload)
+        response = requests.request("POST", url, headers=headers, data=payload)
         # print("userEnroll Res",response.text)
-        
-        return HttpResponse("response", status=200)
+
+        return HttpResponse(response, status=200)
     return HttpResponse("Failed", status=400)
+
+
 
 # @api_view(['POST'])
 # def user_un_enrolled(request):
@@ -151,8 +156,8 @@ def user_created(request):
 #     return HttpResponse("Failed", status=400)
 
 def getCourse(id):
-        
-    url = f'http://localhost/moodle/webservice/rest/server.php?wstoken=420e1fba6edb4cce5d5a8fd89687e8b2&wsfunction=core_course_get_courses&moodlewsrestformat=json&options[ids][0]={id}'
+
+    url = f'http://13.57.6.254/moodle/webservice/rest/server.php?wstoken=ba3200361450c52be61543d70ee41c13&wsfunction=core_course_get_courses&moodlewsrestformat=json&options[ids][0]={id}'
 
     payload={}
     headers = {}
@@ -162,7 +167,7 @@ def getCourse(id):
     return response
 
 def getUser(id):
-    url = f"http://localhost/moodle/webservice/rest/server.php?wstoken=420e1fba6edb4cce5d5a8fd89687e8b2&wsfunction=core_user_get_users_by_field&moodlewsrestformat=json&field=id&values[0]={id}"
+    url = f"http://13.57.6.253/moodle/webservice/rest/server.php?wstoken=ba3200361450c52be61543d70ee41c13&wsfunction=core_user_get_users_by_field&moodlewsrestformat=json&field=id&values[0]={id}"
     payload={}
     headers = {}
 

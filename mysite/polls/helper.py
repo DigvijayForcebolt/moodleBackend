@@ -8,5 +8,6 @@ def access_token_sf():
     'Cookie': 'BrowserId=YUyLN2D6Ee2G3o9btM0jvg; CookieConsentPolicy=0:1; LSKey-c$CookieConsentPolicy=0:1'
     }
 
-    response = requests.request("POST", url, headers=headers, data=payload)
-    return response.text
+    response = requests.request("POST", url, headers=headers, data=payload).json()
+    access_token = response.get('access_token')
+    return access_token
